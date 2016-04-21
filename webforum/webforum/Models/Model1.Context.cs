@@ -13,10 +13,10 @@ namespace webforum.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ForumDB : DbContext
+    public partial class WebForumDB : DbContext
     {
-        public ForumDB()
-            : base("name=ForumDB")
+        public WebForumDB()
+            : base("name=WebForumDB")
         {
         }
     

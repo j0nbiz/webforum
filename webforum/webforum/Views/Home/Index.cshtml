@@ -1,8 +1,33 @@
-﻿@model 
+﻿@model List<webforum.Models.user>
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+@foreach (var item in Model)
+{
+    <div class="user_h"><h3>@item.username.ToUpper()</h3></div>
 
+    <div class="info">
+        <table>
+            <tr>
+                <td>
+                    <p>User ID:</p>
+                    <p>@item.user_id</p>
+                </td>
 
+                <th>
+                    <p>Name: @item.firstname @item.lastname</p>
+
+                    @if (@item.email == null)
+                    {
+                        <p>Email: n/a</p>
+                    }else{
+                        <p>Email: @item.email</p>
+                    }
+
+                    <p>Reputation: @item.reputation.GetValueOrDefault()</p>
+                </th>
+            </tr>
+        </table>
+    </div>
+}

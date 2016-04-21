@@ -16,15 +16,43 @@ textarea {
     max-width: 280px;
 }
 
-.contact {
+.info {
     width: 100%;
 }
 
 table {
-    padding-left: 40px;
+    padding-left: 80px;
 }
 
 th {
+    width: 300px;
+
+    padding: 20px 20px 10px 20px;
+
     text-align: left;
-    border: 1px solid black;
+
+    border: 2px solid black;
+}
+
+td {
+    width: 300px;
+
+    padding: 20px 20px 0px 20px;
+
+    text-align: right;
+
+    vertical-align: text-top;
+
+    border: 2px dotted black;
+}
+
+p {
+    line-height: 2px;
+    font-weight: bold;
+}
+
+div.user_h {
+    width: 600px;
+
+    text-align: center;
 }

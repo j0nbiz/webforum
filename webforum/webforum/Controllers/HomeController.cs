@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using webforum.Models;
 
 namespace webforum.Controllers
 {
@@ -11,7 +12,14 @@ namespace webforum.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            return View();
+            using (var db = new WebForumDB())
+            {
+                var query = (from entry in db.users
+                             orderby entry.user_id ascending
+                             select entry).ToList<user>();
+
+                return View(query);
+            }
         }
     }
 }
