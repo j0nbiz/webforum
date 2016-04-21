@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ForumModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="blacklist">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="expiry" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="comments">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="int" Nullable="false" />
+          <Property Name="target_thread_id" Type="int" Nullable="false" />
+          <Property Name="target_comment_id" Type="int" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="upvotes" Type="int" />
+          <Property Name="content" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="threads">
+          <Key>
+            <PropertyRef Name="thread_id" />
+          </Key>
+          <Property Name="thread_id" Type="int" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar(max)" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="tags" Type="varchar(max)" />
+          <Property Name="views" Type="int" />
+          <Property Name="upvotes" Type="int" />
+          <Property Name="content" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar(max)" Nullable="false" />
+          <Property Name="password" Type="varchar(max)" Nullable="false" />
+          <Property Name="firstname" Type="varchar(max)" Nullable="false" />
+          <Property Name="lastname" Type="varchar(max)" Nullable="false" />
+          <Property Name="email" Type="varchar(max)" />
+          <Property Name="image" Type="varchar(max)" />
+          <Property Name="reputation" Type="int" />
+        </EntityType>
+        <Association Name="FK_blacklist_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="blacklist" Type="Self.blacklist" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="blacklist">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_comments">
+          <End Role="comments" Type="Self.comments" Multiplicity="0..1" />
+          <End Role="comments1" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="comments">
+              <PropertyRef Name="comment_id" />
+            </Principal>
+            <Dependent Role="comments1">
+              <PropertyRef Name="target_comment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_threads">
+          <End Role="threads" Type="Self.threads" Multiplicity="1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="threads">
+              <PropertyRef Name="thread_id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="target_thread_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_threads_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="threads" Type="Self.threads" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="threads">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ForumModelStoreContainer">
+          <EntitySet Name="blacklist" EntityType="Self.blacklist" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="threads" EntityType="Self.threads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_blacklist_users" Association="Self.FK_blacklist_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="blacklist" EntitySet="blacklist" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_comments" Association="Self.FK_comments_comments">
+            <End Role="comments" EntitySet="comments" />
+            <End Role="comments1" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_threads" Association="Self.FK_comments_threads">
+            <End Role="threads" EntitySet="threads" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_users" Association="Self.FK_comments_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_threads_users" Association="Self.FK_threads_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="threads" EntitySet="threads" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ForumModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="blacklist">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="expiry" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="user" Relationship="Self.FK_blacklist_users" FromRole="blacklist" ToRole="users" />
+        </EntityType>
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="comment_id" />
+          </Key>
+          <Property Name="comment_id" Type="Int32" Nullable="false" />
+          <Property Name="target_thread_id" Type="Int32" Nullable="false" />
+          <Property Name="target_comment_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="upvotes" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="comments1" Relationship="Self.FK_comments_comments" FromRole="comments" ToRole="comments1" />
+          <NavigationProperty Name="comment1" Relationship="Self.FK_comments_comments" FromRole="comments1" ToRole="comments" />
+          <NavigationProperty Name="thread" Relationship="Self.FK_comments_threads" FromRole="comments" ToRole="threads" />
+          <NavigationProperty Name="user" Relationship="Self.FK_comments_users" FromRole="comments" ToRole="users" />
+        </EntityType>
+        <EntityType Name="thread">
+          <Key>
+            <PropertyRef Name="thread_id" />
+          </Key>
+          <Property Name="thread_id" Type="Int32" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="tags" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="views" Type="Int32" />
+          <Property Name="upvotes" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="comments" Relationship="Self.FK_comments_threads" FromRole="threads" ToRole="comments" />
+          <NavigationProperty Name="user" Relationship="Self.FK_threads_users" FromRole="threads" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="firstname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="reputation" Type="Int32" />
+          <NavigationProperty Name="blacklist" Relationship="Self.FK_blacklist_users" FromRole="users" ToRole="blacklist" />
+          <NavigationProperty Name="comments" Relationship="Self.FK_comments_users" FromRole="users" ToRole="comments" />
+          <NavigationProperty Name="threads" Relationship="Self.FK_threads_users" FromRole="users" ToRole="threads" />
+        </EntityType>
+        <Association Name="FK_blacklist_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="blacklist" Type="Self.blacklist" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="blacklist">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_comments">
+          <End Role="comments" Type="Self.comment" Multiplicity="0..1" />
+          <End Role="comments1" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="comments">
+              <PropertyRef Name="comment_id" />
+            </Principal>
+            <Dependent Role="comments1">
+              <PropertyRef Name="target_comment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_threads">
+          <End Role="threads" Type="Self.thread" Multiplicity="1" />
+          <End Role="comments" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="threads">
+              <PropertyRef Name="thread_id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="target_thread_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_comments_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="comments" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_threads_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="threads" Type="Self.thread" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="user_id" />
+            </Principal>
+            <Dependent Role="threads">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ForumDB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="blacklists" EntityType="Self.blacklist" />
+          <EntitySet Name="comments" EntityType="Self.comment" />
+          <EntitySet Name="threads" EntityType="Self.thread" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK_blacklist_users" Association="Self.FK_blacklist_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="blacklist" EntitySet="blacklists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_comments" Association="Self.FK_comments_comments">
+            <End Role="comments" EntitySet="comments" />
+            <End Role="comments1" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_threads" Association="Self.FK_comments_threads">
+            <End Role="threads" EntitySet="threads" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_comments_users" Association="Self.FK_comments_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_threads_users" Association="Self.FK_threads_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="threads" EntitySet="threads" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ForumModelStoreContainer" CdmEntityContainer="ForumDB">
+          <EntitySetMapping Name="blacklists">
+            <EntityTypeMapping TypeName="ForumModel.blacklist">
+              <MappingFragment StoreEntitySet="blacklist">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="expiry" ColumnName="expiry" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="ForumModel.comment">
+              <MappingFragment StoreEntitySet="comments">
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+                <ScalarProperty Name="target_thread_id" ColumnName="target_thread_id" />
+                <ScalarProperty Name="target_comment_id" ColumnName="target_comment_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="upvotes" ColumnName="upvotes" />
+                <ScalarProperty Name="content" ColumnName="content" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="threads">
+            <EntityTypeMapping TypeName="ForumModel.thread">
+              <MappingFragment StoreEntitySet="threads">
+                <ScalarProperty Name="thread_id" ColumnName="thread_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="tags" ColumnName="tags" />
+                <ScalarProperty Name="views" ColumnName="views" />
+                <ScalarProperty Name="upvotes" ColumnName="upvotes" />
+                <ScalarProperty Name="content" ColumnName="content" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="ForumModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="reputation" ColumnName="reputation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
