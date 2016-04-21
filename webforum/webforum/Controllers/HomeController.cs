@@ -14,9 +14,11 @@ namespace webforum.Controllers
         {
             using (var db = new WebForumDB())
             {
-                var query = (from entry in db.users
+                var query = (from entry in db.users.Include("threads")
                              orderby entry.user_id ascending
                              select entry).ToList<user>();
+
+
 
                 return View(query);
             }

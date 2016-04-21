@@ -1,6 +1,6 @@
 ﻿@model List<webforum.Models.user>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Home";
 }
 
 @foreach (var item in Model)
@@ -26,6 +26,36 @@
                     }
 
                     <p>Reputation: @item.reputation.GetValueOrDefault()</p>
+                </th>
+            </tr>
+        </table>
+    </div>
+
+    <br />
+    
+    <div class="threads">
+        <table>
+            <tr>
+                <td>
+                    @if (@item.threads.FirstOrDefault() == null)
+                    {
+                        <p>Title: n/a</p>
+                    }
+                    else
+                    {
+                        <p>Title: @item.threads.FirstOrDefault().title</p>
+                    }
+                </td>
+
+                <th>
+                    @if (@item.threads.FirstOrDefault() == null)
+                    {
+                        <p>n/a</p>
+                    }
+                    else
+                    {
+                        <p>@item.threads.FirstOrDefault().content</p>
+                    }
                 </th>
             </tr>
         </table>
