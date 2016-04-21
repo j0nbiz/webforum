@@ -16,3 +16,15 @@ textarea {
     max-width: 280px;
 }
 
+.contact {
+    width: 100%;
+}
+
+table {
+    padding-left: 40px;
+}
+
+th {
+    text-align: left;
+    border: 1px solid black;
+}
