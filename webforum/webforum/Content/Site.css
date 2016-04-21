@@ -56,3 +56,10 @@ div.user_h {
 
     text-align: center;
 }
+span {
+    line-height: 2px;
+    font-weight: bold;
+
+    width: 260px;
+    word-wrap: break-word;
+}

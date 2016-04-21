@@ -39,11 +39,11 @@
                 <td>
                     @if (@item.threads.FirstOrDefault() == null)
                     {
-                        <p>Title: n/a</p>
+                        <p>Thread: n/a</p>
                     }
                     else
                     {
-                        <p>Title: @item.threads.FirstOrDefault().title</p>
+                        <span>Thread: @item.threads.FirstOrDefault().title</span>
                     }
                 </td>
 
@@ -54,7 +54,7 @@
                     }
                     else
                     {
-                        <p>@item.threads.FirstOrDefault().content</p>
+                        <span>@item.threads.FirstOrDefault().content</span>
                     }
                 </th>
             </tr>
